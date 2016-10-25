@@ -54,7 +54,6 @@ public class CoreController extends GenericController {
         String signature = request.getParameter("signature");
         String nonce = request.getParameter("nonce");
         String timestamp = request.getParameter("timestamp");
-
         if (!this.wxMpService.checkSignature(timestamp, nonce, signature)) {
             // 消息签名不正确，说明不是公众平台发过来的消息
             response.getWriter().println("非法请求");
@@ -82,16 +81,20 @@ public class CoreController extends GenericController {
         }
 
         if ("aes".equals(encryptType)) {
+
             // 是aes加密的消息
             String msgSignature = request.getParameter("msg_signature");
+
+
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(
                 request.getInputStream(), this.configStorage, timestamp, nonce,
                 msgSignature);
-            this.logger.debug("\n消息解密后内容为：\n{} ", inMessage.toString());
+
+            this.logger.info("\n消息解密后内容为：\n{} ", inMessage.toString());
             WxMpXmlOutMessage outMessage = this.coreService.route(inMessage);
-            this.logger.info(response.toString());
             response.getWriter()
                 .write(outMessage.toEncryptedXml(this.configStorage));
+
             return;
         }
 

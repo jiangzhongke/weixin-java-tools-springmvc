@@ -49,6 +49,30 @@ public class MainConfig {
         return configStorage;
     }
 
+    public void setAppid(String appid) {
+        this.appid = appid;
+    }
+
+    public void setAppsecret(String appsecret) {
+        this.appsecret = appsecret;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void setAesKey(String aesKey) {
+        this.aesKey = aesKey;
+    }
+
+    public void setPartenerId(String partenerId) {
+        this.partenerId = partenerId;
+    }
+
+    public void setPartenerKey(String partenerKey) {
+        this.partenerKey = partenerKey;
+    }
+
     @Bean
     public WxMpService wxMpService() {
         WxMpService wxMpService = new WxMpServiceImpl();

@@ -5,6 +5,7 @@ import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpConfigStorage;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.WxMpXmlOutTextMessage;
@@ -47,7 +48,13 @@ public class SubscribeHandler extends AbstractHandler {
             .fromUser(wxMessage.getToUser())
             .toUser(wxMessage.getFromUser())
             .build();
-        logger.info("subscribeMessageHandler" + m.getContent());
+        WxMpCustomMessage message = WxMpCustomMessage
+                .TEXT()
+                .content("亲亲的" + wxMpUser.getNickname() + "，您好！")
+                .toUser(wxMessage.getFromUser())
+                .build();
+        wxMpService.getKefuService().customMessageSend(message);
+        logger.info("subscribeMessageHandler" + message.getContent());
         return m;
     }
 };
