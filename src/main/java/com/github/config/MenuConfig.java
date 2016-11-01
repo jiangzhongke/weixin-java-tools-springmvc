@@ -25,39 +25,39 @@ public class MenuConfig {
         WxMenu menu = new WxMenu();
         WxMenuButton button1 = new WxMenuButton();
         button1.setType(WxConsts.BUTTON_VIEW);
-        button1.setName("买家订单");
-        button1.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
-
+        button1.setName("我要投资");
+        button1.setUrl(wxMpService.oauth2buildAuthorizationUrl("http://mybatis.baojinsuo.cn", "snsapi_base", "123"));
+        System.out.println(button1.getUrl());
         WxMenuButton button2 = new WxMenuButton();
-        button2.setName("我是卖家");
+        button2.setName("我的帐户");
 
         WxMenuButton button21 = new WxMenuButton();
         button21.setType(WxConsts.BUTTON_VIEW);
-        button21.setName("我的订单");
+        button21.setName("账户概览");
         button21.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
         WxMenuButton button22 = new WxMenuButton();
         button22.setType(WxConsts.BUTTON_VIEW);
-        button22.setName("收入统计");
+        button22.setName("订阅通知");
         button22.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
-        WxMenuButton button23 = new WxMenuButton();
-        button23.setType(WxConsts.BUTTON_VIEW);
-        button23.setName("发布商品");
-        button23.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
-
-        WxMenuButton button24 = new WxMenuButton();
-        button24.setType(WxConsts.BUTTON_VIEW);
-        button24.setName("商品管理");
-        button24.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
+//        WxMenuButton button23 = new WxMenuButton();
+//        button23.setType(WxConsts.BUTTON_VIEW);
+//        button23.setName("发布商品");
+//        button23.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
+//
+//        WxMenuButton button24 = new WxMenuButton();
+//        button24.setType(WxConsts.BUTTON_VIEW);
+//        button24.setName("商品管理");
+//        button24.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
 
         button2.getSubButtons().add(button21);
         button2.getSubButtons().add(button22);
-        button2.getSubButtons().add(button23);
-        button2.getSubButtons().add(button24);
+//        button2.getSubButtons().add(button23);
+//        button2.getSubButtons().add(button24);
 
         WxMenuButton button3 = new WxMenuButton();
-        button3.setType(WxConsts.BUTTON_CLICK);
+        button3.setType(WxConsts.BUTTON_VIEW);
         button3.setName("使用帮助");
         button3.setKey("help");
 
@@ -81,8 +81,8 @@ public class MenuConfig {
         mainConfig.setToken("bjswx");
         WxMpService wxMpService = mainConfig.wxMpService();
         try {
-//            wxMpService.getMenuService().menuCreate(getMenu());
-            wxMpService.getMenuService().menuDelete();
+            wxMpService.getMenuService().menuCreate(getMenu());
+//            wxMpService.getMenuService().menuDelete();
         } catch (WxErrorException e) {
             e.printStackTrace();
         }

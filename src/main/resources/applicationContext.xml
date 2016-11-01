@@ -34,5 +34,5 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <util:properties id="wxProperties" location="classpath:/wx.properties" />
-
+    <util:properties id="smsProperties" location="classpath:/sms.properties" />
 </beans>

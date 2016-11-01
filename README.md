@@ -60,3 +60,22 @@ URL(服务器地址)：http://192.168.1.1/wechatTestService/core
 - 请在遵守当地相关法律法规的前提下使用本项目。
 
 ![img-source-from-https://github.com/docker/dockercraft](https://github.com/docker/dockercraft/raw/master/docs/img/contribute.png?raw=true)
+
+
+短信模板消息
+http://localhost:8080/wechatService/sendSms
+参数名                      参数[解释]
+tunnel[通道]                clyxnew[创蓝营销],cltzold[创蓝通知保金所专用],cltznew[创蓝保金所,名品公用通知,未缴费]
+modelName[模板编号]
+"101":("您成功购买了"+param.getParameter("key1")+"元"+param.getParameter("key2")+"，年化利率"+param.getParameter("key3")+"%，理财周期"+param.getParameter("key4")+"到期日"+param.getParameter("key5")+"。");
+"102":("您购买的"+param.getParameter("key1")+"已到期，还款本金"+param.getParameter("key2")+"元，利息"+param.getParameter("key3")+"元。本息已返还到您的账户余额。");
+"103":("您的验证码是"+param.getParameter("key1"));
+"104":("您账户于"+param.getParameter("key1")+"发生一笔"+param.getParameter("key2")+"元的充值操作，已到账请查账户余额。");
+"105":("您账户于"+param.getParameter("key1")+"发生一笔"+param.getParameter("key2")+"元的取现操作，预计1-3个工作日到账，请注意银行通知。");
+"106":("今日"+param.getParameter("key1")+",到期产品共有"+param.getParameter("key2")+"个，第"+param.getParameter("key3")+"个，"+param.getParameter("key4")+"本金总共"+param.getParameter("key5")+"元，利息总共"+param.getParameter("key6")+"元。");
+其他未定制:key1
+
+user[使用端]                baojinsuo,mingpin,对应头部【保金所】,【名品消费宝】
+mobile[接收手机号]
+key1,key2,key3...对应模板编号中的为参数内容
+accesskey[接口权限密码]
