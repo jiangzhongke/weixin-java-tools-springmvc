@@ -3,6 +3,8 @@ package com.github.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.service.CoreService;
+import me.chanjar.weixin.mp.bean.WxMpCustomMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,8 @@ public class TemplateMessageController extends GenericController {
     protected WxMpConfigStorage configStorage;
     @Autowired
     protected WxMpService wxMpService;
+    @Autowired
+    protected CoreService coreService;
 
     @RequestMapping(value = "notifyRepaymentArrivedTemplate")
     public void notifyRepaymentArrivedTemplate(HttpServletResponse response,
@@ -160,5 +164,81 @@ public class TemplateMessageController extends GenericController {
         } catch (WxErrorException e) {
             logger.error(e.getMessage().toString());
         }
+    }
+    @RequestMapping(value = "notifyAccountDetailTemplate")
+    public void notifyAccountDetailTemplate(HttpServletResponse response,
+                                          HttpServletRequest request) {
+        WxMpTemplateMessage orderPaySuccessTemplate = new WxMpTemplateMessage();
+        orderPaySuccessTemplate.setToUser(request.getParameter("openid"));
+        orderPaySuccessTemplate.setTemplateId("7mElOo_pA1iBQIo9gbnJO58-3F1ZfwD4r4dYJsGtNpw");
+        orderPaySuccessTemplate.setUrl(request.getParameter("url"));
+        orderPaySuccessTemplate.setTopColor(TEMPLATE_FRONT_COLOR);
+        WxMpTemplateData firstData = new WxMpTemplateData("first",request.getParameter("first"), TEMPLATE_FRONT_COLOR);
+        WxMpTemplateData keyword1 = new WxMpTemplateData("keyword1", request.getParameter("keyword1"), TEMPLATE_FRONT_COLOR);
+        WxMpTemplateData keyword2 = new WxMpTemplateData("keyword2", request.getParameter("keyword2"), TEMPLATE_FRONT_COLOR);
+        WxMpTemplateData keyword3 = new WxMpTemplateData("keyword3", request.getParameter("keyword3"), TEMPLATE_FRONT_COLOR);
+        WxMpTemplateData keyword4 = new WxMpTemplateData("keyword4", request.getParameter("keyword4"), TEMPLATE_FRONT_COLOR);
+        WxMpTemplateData keyword5 = new WxMpTemplateData("keyword5", request.getParameter("keyword5"), TEMPLATE_FRONT_COLOR);
+        WxMpTemplateData remarkData = new WxMpTemplateData("remark", request.getParameter("remark"), TEMPLATE_FRONT_COLOR);
+        orderPaySuccessTemplate.addWxMpTemplateData(firstData);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword1);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword2);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword3);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword4);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword5);
+        orderPaySuccessTemplate.addWxMpTemplateData(remarkData);
+        try {
+            wxMpService.getTemplateMsgService()
+                    .sendTemplateMsg(orderPaySuccessTemplate);
+        } catch (WxErrorException e) {
+            logger.error(e.getMessage().toString());
+        }
+    }
+    //运营人员通知还款状态
+    @RequestMapping({"notifyRepaymentStatusTemplate"})
+    public void notifyRepaymentStatusTemplate(HttpServletResponse response, HttpServletRequest request) {
+        WxMpTemplateMessage orderPaySuccessTemplate = new WxMpTemplateMessage();
+        orderPaySuccessTemplate.setToUser(request.getParameter("openid"));
+        orderPaySuccessTemplate.setTemplateId("pCn-kmZQYMIoMSAAuldMGSylzwkw3QNuiKNDgIhOaHI");
+        orderPaySuccessTemplate.setUrl(request.getParameter("url"));
+        orderPaySuccessTemplate.setTopColor("#000000");
+        WxMpTemplateData firstData = new WxMpTemplateData("first", request.getParameter("first"), "#000000");
+        WxMpTemplateData keyword1 = new WxMpTemplateData("keyword1", request.getParameter("keyword1"), "#000000");
+        WxMpTemplateData keyword2 = new WxMpTemplateData("keyword2", request.getParameter("keyword2"), "#000000");
+        WxMpTemplateData keyword3 = new WxMpTemplateData("keyword3", request.getParameter("keyword3"), "#000000");
+        WxMpTemplateData keyword4 = new WxMpTemplateData("keyword4", request.getParameter("keyword4"), "#000000");
+        WxMpTemplateData keyword5 = new WxMpTemplateData("keyword5", request.getParameter("keyword5"), "#000000");
+        WxMpTemplateData remarkData = new WxMpTemplateData("remark", request.getParameter("remark"), "#000000");
+        orderPaySuccessTemplate.addWxMpTemplateData(firstData);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword1);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword2);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword3);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword4);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword5);
+        orderPaySuccessTemplate.addWxMpTemplateData(remarkData);
+
+        try {
+            this.wxMpService.getTemplateMsgService().sendTemplateMsg(orderPaySuccessTemplate);
+        } catch (WxErrorException var12) {
+            this.logger.error(var12.getMessage().toString());
+        }
+
+    }
+    //消息推送通知
+    @RequestMapping({"messagePush"})
+
+    public void messagePush(HttpServletResponse response, HttpServletRequest request)  throws WxErrorException {
+        WxMpCustomMessage message = WxMpCustomMessage
+                .TEXT()
+                .content(request.getParameter("message"))
+                .toUser(request.getParameter("openid"))
+                .build();
+        try {
+            this.wxMpService.getKefuService().customMessageSend(message);
+        } catch (WxErrorException var12) {
+            this.logger.error(var12.getMessage().toString());
+        }
+        this.logger.info("SubscribeMessageHandler:" + message.getContent());
+
     }
 }

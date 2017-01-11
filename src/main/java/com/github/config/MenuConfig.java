@@ -26,7 +26,7 @@ public class MenuConfig {
         WxMenuButton button1 = new WxMenuButton();
         button1.setType(WxConsts.BUTTON_VIEW);
         button1.setName("我要投资");
-        button1.setUrl(wxMpService.oauth2buildAuthorizationUrl("http://mybatis.baojinsuo.cn", "snsapi_base", "123"));
+        button1.setUrl(wxMpService.oauth2buildAuthorizationUrl("https://www.baojinsuo.com", "snsapi_base", "123"));
         System.out.println(button1.getUrl());
         WxMenuButton button2 = new WxMenuButton();
         button2.setName("我的帐户");
@@ -34,12 +34,17 @@ public class MenuConfig {
         WxMenuButton button21 = new WxMenuButton();
         button21.setType(WxConsts.BUTTON_VIEW);
         button21.setName("账户概览");
-        button21.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
+        button21.setUrl(wxMpService.oauth2buildAuthorizationUrl("https://www.baojinsuo.com", "snsapi_base", ""));
 
         WxMenuButton button22 = new WxMenuButton();
         button22.setType(WxConsts.BUTTON_VIEW);
         button22.setName("订阅通知");
-        button22.setUrl(wxMpService.oauth2buildAuthorizationUrl("", "snsapi_base", ""));
+        button22.setUrl(wxMpService.oauth2buildAuthorizationUrl("https://www.baojinsuo.com", "snsapi_base", ""));
+
+        WxMenuButton button23 = new WxMenuButton();
+        button23.setType(WxConsts.BUTTON_VIEW);
+        button23.setName("绑定帐号");
+        button23.setUrl(wxMpService.oauth2buildAuthorizationUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx931dc45ba9c45973&redirect_uri=http%3A%2F%2Fspringboot.baojinsuo.cn/wxuser/login&response_type=code&scope=snsapi_base&state=123#wechat_redirect", "snsapi_base", ""));
 
 //        WxMenuButton button23 = new WxMenuButton();
 //        button23.setType(WxConsts.BUTTON_VIEW);
@@ -53,6 +58,7 @@ public class MenuConfig {
 
         button2.getSubButtons().add(button21);
         button2.getSubButtons().add(button22);
+        button2.getSubButtons().add(button23);
 //        button2.getSubButtons().add(button23);
 //        button2.getSubButtons().add(button24);
 

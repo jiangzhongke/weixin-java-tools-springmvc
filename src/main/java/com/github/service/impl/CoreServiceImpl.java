@@ -1,5 +1,6 @@
 package com.github.service.impl;
 
+import com.github.handler.ClickHandler;
 import com.github.handler.LogHandler;
 import com.github.handler.MsgHandler;
 import com.github.handler.SubscribeHandler;
@@ -45,6 +46,8 @@ public class CoreServiceImpl implements CoreService {
     protected LogHandler logHandler;
     @Autowired
     protected SubscribeHandler subscribeHandler;
+    @Autowired
+    protected ClickHandler clickHandler;
     @Autowired
     protected MsgHandler msgHandler;
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -103,6 +106,10 @@ public class CoreServiceImpl implements CoreService {
         // 关注事件
         newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
             .event(WxConsts.EVT_SUBSCRIBE).handler(this.subscribeHandler)
+                .next();
+        // 点击事件
+        newRouter.rule().async(false).msgType(WxConsts.XML_MSG_EVENT)
+                .event(WxConsts.BUTTON_CLICK).handler(this.clickHandler)
                 .next();
         // 默认,转发消息给客服人员
         newRouter.rule().async(false).handler(this.msgHandler).end();

@@ -31,26 +31,26 @@ public class SmsModel {
 
         }}
         switch (param.getParameter("modelName")){
-            case "101":
+            case "buy_success":
                 str.append("您成功购买了"+param.getParameter("key1")+"元"+param.getParameter("key2")+"，年化利率"+param.getParameter("key3")+"%，理财周期"+param.getParameter("key4")+"到期日"+param.getParameter("key5")+"。");
                 break;
-            case "102":
+            case "repayment_success":
                 str.append("您购买的"+param.getParameter("key1")+"已到期，还款本金"+param.getParameter("key2")+"元，利息"+param.getParameter("key3")+"元。本息已返还到您的账户余额。");
                 break;
-            case "103":
+            case "verify_code":
                 str.append("您的验证码是"+param.getParameter("key1"));
                 break;
-            case "104":
+            case "user_deposit":
                 str.append("您账户于"+param.getParameter("key1")+"发生一笔"+param.getParameter("key2")+"元的充值操作，已到账请查账户余额。");
                 break;
-            case "105":
+            case "user_chash":
                 str.append("您账户于"+param.getParameter("key1")+"发生一笔"+param.getParameter("key2")+"元的取现操作，预计1-3个工作日到账，请注意银行通知。");
                 break;
-            case "106":
-                str.append("今日"+param.getParameter("key1")+",到期产品共有"+param.getParameter("key2")+"个，第"+param.getParameter("key3")+"个，"+param.getParameter("key4")+"本金总共"+param.getParameter("key5")+"元，利息总共"+param.getParameter("key6")+"元。");
+            case "repayment_product":
+                str.append(param.getParameter("first") +  "还款状态:" + param.getParameter("keyword1") + "已还本息:"+param.getParameter("keyword2") +",待还本息:"+param.getParameter("keyword3")+",还款笔数:"+param.getParameter("keyword4")+",还款人次:"+param.getParameter("keyword5")+","+param.getParameter("remark"));
                 break;
             default:
-                str.append(param.getParameter("key1"));
+                str.append(param.getParameter("message"));
                 break;
         }
         if(param.getParameter("tunnel").equals("clyxnew")){
