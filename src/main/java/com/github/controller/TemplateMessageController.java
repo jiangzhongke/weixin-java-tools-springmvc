@@ -224,6 +224,30 @@ public class TemplateMessageController extends GenericController {
         }
 
     }
+    //赎回成功通知
+    @RequestMapping({"notifyRedemptionTemplate"})
+    public void notifyRedemptionTemplate(HttpServletResponse response, HttpServletRequest request) {
+        WxMpTemplateMessage orderPaySuccessTemplate = new WxMpTemplateMessage();
+        orderPaySuccessTemplate.setToUser(request.getParameter("openid"));
+        orderPaySuccessTemplate.setTemplateId("BV6VysKnaQVZqzA6OxDTukKoR8UwPxoFGT98T4_BeUw");
+        orderPaySuccessTemplate.setUrl(request.getParameter("url"));
+        orderPaySuccessTemplate.setTopColor("#000000");
+        WxMpTemplateData firstData = new WxMpTemplateData("first", request.getParameter("first"), "#000000");
+        WxMpTemplateData keyword1 = new WxMpTemplateData("keyword1", request.getParameter("keyword1"), "#000000");
+        WxMpTemplateData keyword2 = new WxMpTemplateData("keyword2", request.getParameter("keyword2"), "#000000");
+        WxMpTemplateData remarkData = new WxMpTemplateData("remark", request.getParameter("remark"), "#000000");
+        orderPaySuccessTemplate.addWxMpTemplateData(firstData);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword1);
+        orderPaySuccessTemplate.addWxMpTemplateData(keyword2);
+        orderPaySuccessTemplate.addWxMpTemplateData(remarkData);
+
+        try {
+            this.wxMpService.getTemplateMsgService().sendTemplateMsg(orderPaySuccessTemplate);
+        } catch (WxErrorException var12) {
+            this.logger.error(var12.getMessage().toString());
+        }
+
+    }
     //消息推送通知
     @RequestMapping({"messagePush"})
 

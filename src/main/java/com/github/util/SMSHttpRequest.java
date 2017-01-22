@@ -9,8 +9,102 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 public class SMSHttpRequest {
+    private static class TrustAnyTrustManager implements X509TrustManager {
+
+        public void checkClientTrusted(X509Certificate[] chain, String authType)
+                throws CertificateException {
+        }
+
+        public void checkServerTrusted(X509Certificate[] chain, String authType)
+                throws CertificateException {
+        }
+
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[] {};
+        }
+    }
+
+    private static class TrustAnyHostnameVerifier implements HostnameVerifier {
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    }
+
+    /**
+     * post方式请求服务器(https协议)
+     *
+     * @param url
+     *            请求地址
+     * @param map
+     *            参数
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws IOException
+     */
+    public static byte[] sendHttpsPost(String url, Map<String, String> map)
+            throws NoSuchAlgorithmException, KeyManagementException,
+            IOException {
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, new TrustManager[] { new TrustAnyTrustManager() },
+                new java.security.SecureRandom());
+
+        URL console = new URL(url);
+        HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
+        conn.setSSLSocketFactory(sc.getSocketFactory());
+        conn.setHostnameVerifier(new TrustAnyHostnameVerifier());
+        conn.setDoOutput(true);
+        conn.connect();
+        DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+        // 发送请求参数
+        StringBuffer param = new StringBuffer();
+        Iterator<Map.Entry<String, String>> entries = map.entrySet().iterator();
+
+        while (entries.hasNext()) {
+
+            Map.Entry<String, String> entry = entries.next();
+            param.append(entry.getKey()+"="+entry.getValue()+"&");
+//                System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+
+        }
+        out.write(param.toString().getBytes("utf8"));
+        // 刷新、关闭
+        out.flush();
+        out.close();
+        InputStream is = conn.getInputStream();
+        if (is != null) {
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = is.read(buffer)) != -1) {
+                outStream.write(buffer, 0, len);
+            }
+            is.close();
+            return outStream.toByteArray();
+        }
+        return null;
+    }
+
     /**
      * 向指定URL发送GET方法的请求
      * 
@@ -114,8 +208,13 @@ public class SMSHttpRequest {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！"+e);
-            e.printStackTrace();
+            System.out.println("发送HttpPost异常");
+            try {
+                result=new String(sendHttpsPost(url, map), "utf8");
+            }catch (Exception e2){
+                e.printStackTrace();
+            }
+            //e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
         finally{
@@ -151,7 +250,7 @@ public class SMSHttpRequest {
        map.put("openId", "olHwSuGqKjprKz7GiZChnFTHieQo");
        map.put("serverName", "account_info");
         //发送 POST 请求
-        String sr=SMSHttpRequest.sendPost("http://springboot.baojinsuo.cn/wxuser/notify",map);
+        String sr=SMSHttpRequest.sendPost("https://www.baojinsuo.com/wxuser/notify",map);
         System.out.println("Result:"+sr);
        
     }
